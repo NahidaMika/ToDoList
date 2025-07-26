@@ -31,7 +31,7 @@ A To Do List made in python using tkinter as a GUI.
 
 ## Guide of Usage
 
-As seen on the [Main app](#Screenshots) there are the **_Title_**,**_Last Updated_**, **_To Do List_** and some buttons.
+As seen on the [Main app](#Screenshots) there are the **_Title_**, **_Last Updated_**, **_To Do List_** and some buttons.
 Each button has its function:
 
 - **Re-Download json** : Re-Downloads the json file to the directory **_data/json_**.
