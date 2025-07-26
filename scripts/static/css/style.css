@@ -1,0 +1,19 @@
+#json {
+    resize: none;
+    width: 99%;
+    height: 100px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.editor.updatebutn {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+}
+
+.add {
+    width: 100%;
+    height: 200px;
+    padding: 10px;
+}
