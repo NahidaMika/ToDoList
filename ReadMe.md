@@ -31,4 +31,28 @@ A To Do List made in python using tkinter as a GUI.
 
 ## Guide of Usage
 
-As seen on the [Main app](#Screenshots)
+As seen on the [Main app](#Screenshots) there are the **_Title_**,**_Last Updated_**, **_To Do List_** and some buttons.
+Each button has its function:
+
+- **Re-Download json** : Re-Downloads the json file to the directory **_data/json_**.
+
+- **Reload json**: Reloads the content of the json onto the list.
+
+- **Exit**: Closes the program and if **_Localhost_** is active it closes it.
+
+- **Run LocalHost**: Launches the To-Do List Editor web. (can't be open twice)
+
+- **Exit LocalHost**: Terminates the LocalHost.
+
+In the [Web Editor](#Screenshots) there are some other elements to use:
+
+- **Get json**: Get the json file to edit.
+
+- **Update json**: Update the json in the textbox above.
+
+- **Add Task**: Adds the written task to the textbox for later update.
+
+## Authors
+
+- [@NahidaMika](https://www.github.com/NahidaMika)
+
