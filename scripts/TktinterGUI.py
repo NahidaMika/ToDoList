@@ -5,94 +5,12 @@ import os
 import multiprocessing
 import time
 
-
-
 if __name__ == '__main__':
     from jsonbin import load_jsonbin, download_jsonbin
     import localhostHTML as LocalHost
 else:
     from scripts.jsonbin import load_jsonbin, download_jsonbin
     import scripts.localhostHTML as LocalHost
-
-# def download_todo_json():
-#     download_jsonbin()
-
-# def mainWindow():
-#     root = Tk()
-#     root.geometry((f"{int(root.winfo_screenwidth()/3)}x{int(root.winfo_screenheight()/3)}"))
-#     todo_date_var = StringVar()
-#     todo_task_var = StringVar()
-#     todo_status_var = StringVar()
-#     root.title("Nahida's To-Do List")
-#     root.resizable(False, False)
-
-#     mainframe = ttk.Frame(root, padding="0 0 120 0")
-#     mainframe.grid(column=0, row=0, sticky=(N, W, E, S))
-#     for i in range(5):
-#         root.columnconfigure(i, weight=1)
-#         root.rowconfigure(i, weight=1)
-
-#     ttk.Label(mainframe, text="Nahida's To-Do List", font=("Arial", 16, "bold", "underline")).grid(column=0, row=0, sticky=E)
-
-#     todo_date_var.set(json_date['metadata']['createdAt'].replace('T', '/').replace('Z', '').split('/')[0])
-
-#     ttk.Label(mainframe, text="Last update: ", font=("Arial", 12, "bold")).grid(column=0, row=1, sticky=E)
-#     ttk.Label(mainframe, textvariable=todo_date_var, font=("Arial", 12)).grid(column=1, row=1, sticky=W)
-
-#     todo_row = 2
-#     todo_column = 0
-
-#     ToDoframe = ttk.Frame(mainframe)
-#     ToDoframe.grid(column=todo_column+1, row=todo_row, sticky=NSEW)
-#     for i in range(5):
-#         ToDoframe.columnconfigure(i, weight=1)
-#         ToDoframe.rowconfigure(i, weight=1)
-
-#     scrollbar = ttk.Scrollbar(ToDoframe, orient=VERTICAL, takefocus=True)
-#     scrollbar.grid(column=todo_column+2, row=todo_row, sticky=E)
-
-#     treeview = ttk.Treeview(ToDoframe, yscrollcommand=scrollbar.set)
-#     treeview.grid(column=todo_column+1, row=todo_row, sticky=N+S+W)
-
-#     scrollbar.config(command=treeview.yview)
-
-#     treeview['columns'] = ('todo', 'status')
-
-#     treeview.column("#0", width=0, stretch=NO)
-#     treeview.column("todo", anchor=W, width=200)
-#     treeview.column("status", anchor=W, width=100)
-
-#     treeview.heading("#0", text="", anchor=W)
-#     treeview.heading("todo", text="To-Do", anchor=W)
-#     treeview.heading("status", text="Status", anchor=W)
-
-#     for i, todo in enumerate(json_data['record']['todo']):
-#         todo_task_var.set(todo['task'])
-#         todo_status_var.set(todo['status'])
-#         treeview.insert('', 'end', values=(todo_task_var.get(), todo_status_var.get()))
-
-#     button_row = 3
-#     button_column = 1
-
-#     ButtonFrame = ttk.Frame(mainframe)
-#     ButtonFrame.grid(column=button_column, row=button_row, sticky=N+S+W+E)
-#     for i in range(5):
-#         ButtonFrame.columnconfigure(i, weight=1)
-#         ButtonFrame.rowconfigure(i, weight=1)
-
-#     ttk.Button(ButtonFrame, text=f"Re-Download json", command=download_todo_json).grid(column=button_column+1, row=button_row, sticky=E)
-#     ttk.Button(ButtonFrame, text=f"Update json", command=Reload).grid(column=button_column+2, row=button_row, sticky=W)
-
-#     for child in mainframe.winfo_children(): 
-#         child.grid_configure(padx=5, pady=5)
-
-#     for child in ButtonFrame.winfo_children(): 
-#         child.grid_configure(padx=5, pady=5)
-
-#     for child in ToDoframe.winfo_children(): 
-#         child.grid_configure(padx=5, pady=5)
-
-#     root.mainloop()
 
 class ToDoListGUI:
     def __init__(self, root):
@@ -224,7 +142,7 @@ class ToDoListGUI:
             print('LocalHost is closed')
 
     def run_localhost(self): # Runs the localhost
-        #self.p2 = multiprocessing.Process(target=LocalHost.runlocalhost, args=())
+        self.p2 = multiprocessing.Process(target=LocalHost.runlocalhost, args=("0.0.0.0", 5000)) #Only with multiprocessing
         print('LocalHost is executing..')
         time.sleep(2)
         self.p2.start()

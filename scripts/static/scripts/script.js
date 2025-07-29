@@ -16,7 +16,7 @@ jsonTextArea.onchange = () => {
 function update_with_user_input() {
     let req = new XMLHttpRequest();
     req.onreadystatechange = () => {
-    if (req.readyState == XMLHttpRequest.DONE){
+    if (req.status == 200){
     console.log(req.responseText);
     alert("File updated successfully");
     }
