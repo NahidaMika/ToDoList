@@ -42,8 +42,8 @@ class ToDoListGUI:
             self.json_data = self.data
             self.json_date = self.data
         except json.decoder.JSONDecodeError:
-            self.json_date = {"record": {"date": datetime.datetime.now().strftime('%Y-%m-%d')}}
-            self.json_data = {"record": {"todo": [{"task": "", "status": ""}]}}
+            self.json_date = {"date": datetime.datetime.now().strftime('%Y-%m-%d')}
+            self.json_data = {"todo": [{"task": "", "status": ""}]}
 
         self.mainframe = ttk.Frame(self.root)
         self.mainframe.grid(column=0, row=0, sticky=(N, W, E, S))
@@ -60,7 +60,7 @@ class ToDoListGUI:
         ttk.Label(self.mainframe, text=f"{self.user}'s To-Do List", font=("Arial", 16, "bold", "underline")).grid(column=0, row=0, sticky=W)
 
         self.todo_date_var = StringVar()
-        self.todo_date_var.set(self.json_date['record']['date'])
+        self.todo_date_var.set(self.json_date['date'])
 
         ttk.Label(self.lastupdate, text=f"Last update:", font=("Arial", 12, "bold")).grid(column=0, row=0, sticky=E)
         ttk.Label(self.lastupdate, textvariable=self.todo_date_var, font=("Arial", 12)).grid(column=1, row=0, sticky=W)
@@ -91,7 +91,7 @@ class ToDoListGUI:
         self.todo_task_var = StringVar()
         self.todo_status_var = StringVar()
 
-        for i, todo in enumerate(self.json_data['record']['todo']):
+        for i, todo in enumerate(self.json_data['todo']):
             self.todo_task_var.set(todo['task'])
             self.todo_status_var.set(todo['status'])
             self.treeview.insert('', 'end', values=(self.todo_task_var.get(), self.todo_status_var.get()))
@@ -120,9 +120,9 @@ class ToDoListGUI:
             self.json_date = self.json_data
             self.json_data = self.json_data
 
-            self.todo_date_var.set(self.json_date['record']['date'])
+            self.todo_date_var.set(self.json_date['date'])
             self.treeview.delete(*self.treeview.get_children())
-            for i, todo in enumerate(self.json_data['record']['todo']):
+            for i, todo in enumerate(self.json_data['todo']):
                 self.todo_task_var.set(todo['task'])
                 self.todo_status_var.set(todo['status'])
                 self.treeview.insert('', 'end', values=(self.todo_task_var.get(), self.todo_status_var.get()))
@@ -190,13 +190,13 @@ class ToDoListEditor(ToDoListGUI):
         except Exception as e:
             print(f"Error inesperado: {e}")
 
-        self.json_date = {"record": {"date": datetime.datetime.now().strftime('%Y-%m-%d')}}
-        self.json_data = {"record": {"todo": [{"task": "", "status": ""}]}}
         try:
-            self.get_json_data()
+            self.data = load_jsonbin()
+            self.json_data = self.data
+            self.json_date = self.data
         except json.decoder.JSONDecodeError:
-            pass
-        
+            self.json_date = {"date": datetime.datetime.now().strftime('%Y-%m-%d')}
+            self.json_data = {"todo": [{"task": "", "status": ""}]}
 
         self.mainframe = ttk.Frame(self.root)
         self.mainframe.grid(column=0, row=0, sticky=(N, W, E, S))
@@ -213,7 +213,7 @@ class ToDoListEditor(ToDoListGUI):
         ttk.Label(self.mainframe, text=f"{self.user}'s To-Do List Editor", font=("Arial", 16, "bold", "underline")).grid(column=0, row=0, sticky=W)
 
         self.todo_date_var = StringVar()
-        self.todo_date_var.set(self.json_date['record']['date'])
+        self.todo_date_var.set(self.json_date['date'])
 
         ttk.Label(self.lastupdate, text=f"Last update:", font=("Arial", 12, "bold")).grid(column=0, row=0, sticky=E)
         ttk.Label(self.lastupdate, textvariable=self.todo_date_var, font=("Arial", 12)).grid(column=1, row=0, sticky=W)
@@ -245,7 +245,7 @@ class ToDoListEditor(ToDoListGUI):
         self.todo_status_var = StringVar()
         self.new_task_var = StringVar()
 
-        for i, todo in enumerate(self.json_data['record']['todo']):
+        for i, todo in enumerate(self.json_data['todo']):
             self.todo_task_var.set(todo['task'])
             self.todo_status_var.set(todo['status'])
             self.treeview.insert('', 'end', values=(self.todo_task_var.get(), self.todo_status_var.get()))
@@ -306,12 +306,12 @@ class ToDoListEditor(ToDoListGUI):
         self.root.destroy()
 
     def update_task_status(self, task_index, new_status):
-        if task_index < len(self.json_data['record']['todo']):
-            self.json_data['record']['todo'][task_index]['status'] = new_status
+        if task_index < len(self.json_data['todo']):
+            self.json_data['todo'][task_index]['status'] = new_status
             self.save_jsonbin()
-            print (f"Task status updated: {self.json_data['record']['todo'][task_index]['task']} - {self.json_data['record']['todo'][task_index]['status']}")
+            print (f"Task status updated: {self.json_data['todo'][task_index]['task']} - {self.json_data['todo'][task_index]['status']}")
             self.get_json_data()
-            print (f'Last update: {self.json_date['record']['date']}')
+            print (f'Last update: {self.json_date['date']}')
         else:
             print("Invalid task index")
 
@@ -320,11 +320,11 @@ class ToDoListEditor(ToDoListGUI):
             selected_item = self.treeview.selection()[0] 
             selected_item = self.treeview.index(selected_item)
 
-            self.json_date['record']['date'] = datetime.datetime.now().strftime('%Y-%m-%d')
+            self.json_date['date'] = datetime.datetime.now().strftime('%Y-%m-%d')
 
-            if self.json_data['record']['todo'][selected_item]['status'] == 'Not completed':
+            if self.json_data['todo'][selected_item]['status'] == 'Not completed':
                 new_status = 'Completed'
-            if self.json_data['record']['todo'][selected_item]['status'] == 'Completed':
+            if self.json_data['todo'][selected_item]['status'] == 'Completed':
                 new_status = 'Not completed'
 
             self.update_task_status(selected_item, new_status)
@@ -339,7 +339,7 @@ class ToDoListEditor(ToDoListGUI):
         print("Task Length: ",len(self.new_task_var.get()))
         if len(self.new_task_var.get()) > 0:
             print("New task added:", self.new_task_var.get())
-            self.json_data['record']['todo'].append({'task': self.new_task_var.get(), 'status': 'Not completed'})
+            self.json_data['todo'].append({'task': self.new_task_var.get(), 'status': 'Not completed'})
             self.save_jsonbin()
             self.get_json_data()
             self.new_task_var.set('')
@@ -347,12 +347,12 @@ class ToDoListEditor(ToDoListGUI):
             print('No Task entered')
 
     def delete_task(self, task_index:int):
-        if task_index < len(self.json_data['record']['todo']):
+        if task_index < len(self.json_data['todo']):
 
-            print (f"Task deleted: {self.json_data['record']['todo'][task_index]['task']} - {self.json_data['record']['todo'][task_index]['status']}")
+            print (f"Task deleted: {self.json_data['todo'][task_index]['task']} - {self.json_data['todo'][task_index]['status']}")
 
             # Remove the task from the json data
-            del self.json_data['record']['todo'][task_index]
+            del self.json_data['todo'][task_index]
 
             # Save the updated json data to the file
             self.save_jsonbin()
@@ -367,7 +367,7 @@ class ToDoListEditor(ToDoListGUI):
             selected_item = self.treeview.selection()[0]
             selected_item = self.treeview.index(selected_item)
 
-            self.json_date['record']['date'] = datetime.datetime.now().strftime('%Y-%m-%d')
+            self.json_date['date'] = datetime.datetime.now().strftime('%Y-%m-%d')
 
             self.delete_task(selected_item)
 
@@ -375,7 +375,7 @@ class ToDoListEditor(ToDoListGUI):
             print('No task selected')
     
     def upload_json(self):
-        upload_jsonbin(self.json_data['record'])
+        upload_jsonbin(self.json_data)
 
     def del_api_key(self):
         with open(api_file_path + "JSONBINKEY", 'w') as f:
@@ -486,4 +486,4 @@ def ApiKeyWindow():
     guiEditor.run()
 
 if __name__ == "__main__":
-    ApiKeyWindow()
+    pass
