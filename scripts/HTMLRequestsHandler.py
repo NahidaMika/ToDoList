@@ -4,21 +4,17 @@ import requests
 from pathlib import Path, PureWindowsPath
 
 #File paths
-json_file_path_windows = PureWindowsPath('scripts\\data\\json\\a')
+json_file_path_windows = PureWindowsPath('data\\json\\a')
 json_file_path_not_final = str(Path(json_file_path_windows))
 json_file_path = json_file_path_not_final[:-1]
 
-id_file_path_windows = PureWindowsPath('scripts\\data\\id\\a')
+id_file_path_windows = PureWindowsPath('data\\id\\a')
 id_file_path_not_final = str(Path(id_file_path_windows))
 id_file_path = id_file_path_not_final[:-1]
 
-api_file_path_windows = PureWindowsPath('scripts\\data\\api-keys\\a')
+api_file_path_windows = PureWindowsPath('data\\api-keys\\a')
 api_file_path_not_final = str(Path(api_file_path_windows))
 api_file_path = api_file_path_not_final[:-1]
-
-backup_json_file_path_windows = PureWindowsPath('scripts\\data\\json\\backup\\a')
-backup_json_file_path_not_final = str(Path(backup_json_file_path_windows))
-backup_json_file_path = backup_json_file_path_not_final[:-1]
 
 def check_for_necesary_paths():
     if not os.path.exists(json_file_path):
