@@ -148,6 +148,7 @@ class ToDoListGUI:
 
     def download_todo_json(self): # Re-Download the json file
         download_jsonbin()
+        self.get_json_data()
 
     def open_editor(self):
         self.editor = multiprocessing.Process(target=editorWindow, args=())
