@@ -3,11 +3,9 @@ from flask import Flask, render_template
 import webbrowser
 
 if __name__ == '__main__':
-    from jsonmaker import api_file_path, JSONBINKEY
-    from jsonbin import json_file_id
-else:
-    from scripts.jsonmaker import api_file_path, JSONBINKEY
-    from scripts.jsonbin import json_file_id
+    from HTMLRequestsHandler import key, FileId
+else :
+    from scripts.HTMLRequestsHandler import key, FileId
 
 app = Flask(__name__)
 
@@ -17,16 +15,19 @@ def index():
 
 @app.route("/api-keys/JSONBIN")
 def api_keys():
-    return JSONBINKEY
+    return key
 
 @app.route("/api-keys/FileID")
 def FileID():
-    return json_file_id
+    return FileId
 
 def runlocalhost(host, port):
     url = (f"http://{host}:{port}/")
     webbrowser.open(url, new=2)
     app.run(host, port)
+
+def jsonbin_io():
+    webbrowser.open('https://jsonbin.io/')
     
 
 if __name__ == "__main__":
