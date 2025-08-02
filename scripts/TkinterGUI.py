@@ -31,11 +31,11 @@ class ToDoListGUI:
             # root.iconphoto(False, big_icon, small_icon)
             root.iconphoto(True, icon)
         except TclError:
-            print("Error: No se pudo cargar el icono. Asegúrate de que el archivo 'icon.ico' exista y esté en la ruta correcta.")
+            print("Error: Icon could not be loaded. Make sure 'icon.ico' exists and is in the correct path.")
         except FileNotFoundError:
-            print("Error: El archivo 'icon.ico' no se encontró.")
+            print("Error: File 'icon.ico' not found.")
         except Exception as e:
-            print(f"Error inesperado: {e}")
+            print(f"Unexpected error: {e}")
 
         try:
             self.data = load_jsonbin()
@@ -184,11 +184,11 @@ class ToDoListEditor(ToDoListGUI):
             # root.iconphoto(False, big_icon, small_icon)
             root.iconphoto(True, icon)
         except TclError:
-            print("Error: No se pudo cargar el icono. Asegúrate de que el archivo 'icon.ico' exista y esté en la ruta correcta.")
+            print("Error: Icon could not be loaded. Make sure 'icon.ico' exists and is in the correct path.")
         except FileNotFoundError:
-            print("Error: El archivo 'icon.ico' no se encontró.")
+            print("Error: File 'icon.ico' not found.")
         except Exception as e:
-            print(f"Error inesperado: {e}")
+            print(f"Unexpected error: {e}")
 
         try:
             self.data = load_jsonbin()
