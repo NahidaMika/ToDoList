@@ -1,4 +1,4 @@
-
+# OUTDATED
 # To Do List
 
 A To Do List made in python using tkinter as a GUI.
