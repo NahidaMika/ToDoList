@@ -31,8 +31,8 @@ def check_for_necesary_paths():
 
 def check_for_necesary_files():
     if not os.path.exists(json_file_path + 'ToDoList.json'):
-        with open(json_file_path + 'ToDoList.json', 'xt'):
-            pass
+        with open(json_file_path + 'ToDoList.json', 'xt') as json_file:
+            json_file.write({"date":"","todo":[{"task":"","status":"Not completed"}]})
         print('File "ToDoList.json" created')
     else:
         print('File "ToDoList.json" already exists')
