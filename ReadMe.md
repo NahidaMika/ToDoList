@@ -19,7 +19,7 @@ A To Do List made in python using tkinter as a GUI.
 
 > Editor
 
-<img width="483" height="302" alt="image" src="https://github.com/user-attachments/assets/803fc6b0-fc6a-4e5e-bfb6-7976a275ddb8" />
+<img width="473" height="298" alt="image" src="https://github.com/user-attachments/assets/c4ce4fb9-4858-4896-8cb1-234f0e12249f" />
 
 > Api-Keys editor
 
