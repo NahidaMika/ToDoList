@@ -8,10 +8,10 @@ import datetime
 import json
 
 if __name__ == '__main__':
-    from HTMLRequestsHandler import load_jsonbin, download_jsonbin, save_backup_jsonbin, upload_jsonbin, api_file_path
+    from HTMLRequestsHandler import load_jsonbin, download_jsonbin, save_backup_jsonbin, upload_jsonbin, api_file_path, make_jsonbin, jsonbin_io_main, jsonbin_io_bins
     import localhostHTML as LocalHost
 else:
-    from scripts.HTMLRequestsHandler import load_jsonbin, download_jsonbin, save_backup_jsonbin, upload_jsonbin, api_file_path
+    from scripts.HTMLRequestsHandler import load_jsonbin, download_jsonbin, save_backup_jsonbin, upload_jsonbin, api_file_path, make_jsonbin, jsonbin_io_main, jsonbin_io_bins
     import scripts.localhostHTML as LocalHost
 
 
@@ -415,15 +415,6 @@ class ApiKeyEditor(ToDoListGUI):
 
         self.current_api_keys()
 
-        # if self.current_FileID == '' and self.current_JSONBIN_API_KEY == '': 
-        #     self.current_FileID.set('None')
-        #     self.current_JSONBIN_API_KEY.set('None')
-        # if self.current_FileID == '': 
-        #     self.current_FileID.set('None')
-        # if self.current_JSONBIN_API_KEY == '': 
-        #     self.current_JSONBIN_API_KEY.set('None')
-
-
         ttk.Label(self.entry_frame, text="Api-Key:").grid(column=0, row=0, sticky=W)
         ttk.Entry(self.entry_frame, textvariable=self.JSONBIN_API_KEY).grid(column=1, row=0, sticky=(W, E))
 
@@ -437,11 +428,13 @@ class ApiKeyEditor(ToDoListGUI):
         # ttk.Label(self.entry_frame, textvariable=self.current_FileID).grid(column=1, row=3, sticky=(W, E))
 
         jsonbin_io_hyperlink = ttk.Label(self.entry_frame, text="Jsonbin.io", font=("Arial", 10, "bold", "underline"), foreground="blue")
-        jsonbin_io_hyperlink.grid(column=0, row=4, sticky=W)
+        jsonbin_io_hyperlink.grid(column=0, row=6, sticky=W)
         jsonbin_io_hyperlink.bind("<Button-1>", lambda e: self.jsonbin_io())
 
-        ttk.Button(self.entry_frame, text="Save & Exit", command=self.save_api_keys).grid(column=0, row=2, columnspan=2, sticky=(W, E))
-        ttk.Button(self.entry_frame, text="Exit", command=self.exit).grid(column=0, row=3, columnspan=2, sticky=(W, E))
+        ttk.Button(self.entry_frame, text="Upload Template Json", command=self.upload_template).grid(column=0, row=2, columnspan=2, sticky=(W, E))
+        ttk.Button(self.entry_frame, text="Save", command=self.save_api_keys).grid(column=0, row=3, columnspan=2, sticky=(W, E))
+        ttk.Button(self.entry_frame, text="Save & Exit", command=self.save_and_exit).grid(column=0, row=4, columnspan=2, sticky=(W, E))
+        ttk.Button(self.entry_frame, text="Exit", command=self.exit).grid(column=0, row=5, columnspan=2, sticky=(W, E))
 
         ttk.Label(self.mainframe, text=f"{self.user}'s To-Do List Api-Key Editor", font=("Arial", 16, "bold", "underline")).grid(column=0, row=0, sticky=W)
 
@@ -453,14 +446,36 @@ class ApiKeyEditor(ToDoListGUI):
 
     def save_api_keys(self):
         with open(api_file_path + "JSONBINKEY", "w") as api:  
+            print('Saving JSONBIN Api-Key...')
             api.write(self.JSONBIN_API_KEY.get())
         with open(api_file_path + "FileID", "w") as id:  
+            print('Saving FileID...')
             id.write(self.FileID.get())
 
-        self.root.destroy()
+    def save_and_exit(self):
+        self.save_api_keys()
+        self.exit()
 
     def jsonbin_io(self):
-        LocalHost.jsonbin_io()
+        jsonbin_io_main()
+
+    def bins(self):
+        jsonbin_io_bins()
+
+    def make_template(self):
+        with open(api_file_path + "JSONBINKEY", "r") as api:
+            api = api.read().strip()
+            template = make_jsonbin({'date': datetime.datetime.now().strftime('%Y-%m-%d'), 'todo': [{'task': '', 'status': 'Not completed'}]},api)
+        return template
+
+    def upload_template(self):
+        self.save_api_keys()
+        template =self.make_template()
+        if template.status_code == 200:
+            self.bins()
+        else:
+            print(template.status_code, template.reason)
+            print('Failed to upload file')
 
     def exit(self): # Exits the program
         self.root.destroy()

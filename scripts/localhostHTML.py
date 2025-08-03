@@ -25,11 +25,7 @@ def runlocalhost(host, port):
     url = (f"http://{host}:{port}/")
     webbrowser.open(url, new=2)
     app.run(host, port)
-
-def jsonbin_io():
-    webbrowser.open('https://jsonbin.io/')
     
-
 if __name__ == "__main__":
     runlocalhost("0.0.0.0", 5000)
     

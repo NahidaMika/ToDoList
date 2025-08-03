@@ -2,6 +2,7 @@ import json
 import os
 import requests
 from pathlib import Path, PureWindowsPath
+import webbrowser
 
 #File paths
 json_file_path_windows = PureWindowsPath('data\\json\\a')
@@ -78,6 +79,12 @@ get_file_id_from_file = open(api_file_path + 'FileID', 'r')
 get_file_id_from_file = get_file_id_from_file.read()
 FileId = get_file_id_from_file.strip()
 
+def jsonbin_io_main():
+    webbrowser.open('https://jsonbin.io/')
+
+def jsonbin_io_bins():
+    webbrowser.open('https://jsonbin.io/app/bins')
+
 def check_json():
     try:
         os.rename(json_file_path + f'ToDoList.json', json_file_path + f'ToDoList.json.old')
@@ -146,6 +153,23 @@ def load_jsonbin(): #May never be in use
     except FileNotFoundError:
         print('File not found\n' \
         'Please download the file')
+
+def make_jsonbin(jsondata, apikey):
+    url = 'https://api.jsonbin.io/v3/b'
+    headers = {
+    'Content-Type': 'application/json',
+    'X-Master-Key': apikey, 
+    }
+
+    req = requests.request("POST", url, json=jsondata, headers=headers)
+
+    if req.status_code == 200:
+        print('File uploaded successfully')
+    else:
+        print(req.status_code, req.reason)
+        print('Failed to upload file')
+
+    return req
 
 if __name__ == '__main__':
     #download_jsonbin()
