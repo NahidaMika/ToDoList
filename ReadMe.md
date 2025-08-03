@@ -1,10 +1,11 @@
-# OUTDATED
 # To Do List
 
 A To Do List made in python using tkinter as a GUI.
 
 
 ## Screenshots
+
+
 
 <img width="767" height="391" alt="image" src="https://github.com/user-attachments/assets/3fb64504-3bec-4123-b9fb-9aa225711cb2" />
 
@@ -14,37 +15,74 @@ A To Do List made in python using tkinter as a GUI.
 
 > Web Editor
 
+<img width="683" height="448" alt="image" src="https://github.com/user-attachments/assets/e19812d2-29b2-4723-8baa-9813b879d807" />
+
+> Editor
+
+<img width="483" height="302" alt="image" src="https://github.com/user-attachments/assets/803fc6b0-fc6a-4e5e-bfb6-7976a275ddb8" />
+
+> Api-Keys editor
+
 ## Guide of Installation
 
-- In the first execuion the program is going to create some files and directories that will be needed and the uses will have to manualy change such as the **Api-keys** and **FileID**.
+- In the first execuion the program is going open a window called To-Do List Api-Key Editor where you can enter your own api-keys.
 
-- The current api for the json is [Json Bin](https://jsonbin.io/) that will be using the Api-key, the user will need to provide its own Api-key that is found in [Api-keys Json Bin](https://jsonbin.io/app/app/api-keys) and paste it in the file **_data/api-keys/JSONBINKEY_**.
+- The current api for the json is [Json Bin](https://jsonbin.io/) that will be using the Api-key, the user will need to provide its own Api-key that is found in [Api-keys Json Bin](https://jsonbin.io/app/app/api-keys).
 
-- After placing the key in the file user must create a new json in [Json Bin Files](https://jsonbin.io/app/bins) placing this as its content **{"date": "yyyy-mm-dd",
-  "todo": [{"task": "","status": "Not completed"}]}**.
+- When the Api-key editor opens you can place the key and upload a template to create the json file.
 
-- Then the user has to copy the **FileID** labeled as **_Bin Id_** and paste it in **_data/api-keys/FileID_**.
+- Then the user has to copy the FileID and paste it in.
 
-    - Then run again the program and everything should work as expected.
-
-
+- After the user places both the api-key and Fileid press the button Save & Exit.
 
 ## Guide of Usage
 
-As seen on the [Main app](#Screenshots) there are the **_Title_**, **_Last Updated_**, **_To Do List_** and some buttons.
+As seen on the [Api-key Editor Window](#Screenshots) there are some buttons.
 Each button has its function:
+
+- **Upload template** : It gets the provided api-key and upload a template.
+
+- **Save** : Saves the provided api-key or FileId.
+
+- **Save & Exit** : Saves the provided api-key or FileId and exits the window.
+
+- **Exit** : Exits the window.
+
+In the [Main app Window](#Screenshots):
 
 - **Re-Download json** : Re-Downloads the json file to the directory **_data/json_**.
 
-- **Reload json**: Reloads the content of the json onto the list.
+- **Reload json** : Reloads the content of the json onto the list.
 
-- **Exit**: Closes the program and if **_Localhost_** is active it closes it.
+- **Exit** : Closes the program and if **_Editor Window_** is active it closes it.
 
-- **Run LocalHost**: Launches the To-Do List Editor web. (can't be open twice)
+- **Open Editor** : Launches the To-Do List Editor.
 
-- **Exit LocalHost**: Terminates the LocalHost.
+In the [Editor Window](#Screenshots):
 
-In the [Web Editor](#Screenshots) there are some other elements to use:
+- **Re-Download json** : Re-Downloads the json file to the directory **_data/json_**.
+
+- **Reload json** : Reloads the content of the json onto the list.
+
+- **Exit** : Closes the program and if **_Localhost_** is active it closes it.
+
+- **Run localhost** : Runs the Web Editor.
+
+- **Exits localhost** : Closes the Web editor.
+
+- **Update Status** : Updates the status of the selected task between _Completed_ and _Not Completed_.
+
+- **Add Task** : Add the task entered in the textbox (Entry) with the status _Not Completed_.
+
+- **Delete Task** : Delete the selected task from the json file.
+
+- **Update Json** : Update the json in [Json Bin](https://jsonbin.io/app/bins).
+
+- **Delete api-key** : Deletes the content of the file JSONBINKEY.
+
+- **Delete FileID** : Deletes the content of the file FileID.
+
+In the **_Web Editor_** there are some other elements to use:
 
 - **Get json**: Get the json file to edit.
 
