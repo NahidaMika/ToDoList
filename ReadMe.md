@@ -5,9 +5,7 @@ A To Do List made in python using tkinter as a GUI.
 
 ## Screenshots
 
-
-
-<img width="767" height="391" alt="image" src="https://github.com/user-attachments/assets/3fb64504-3bec-4123-b9fb-9aa225711cb2" />
+<img width="685" height="416" alt="image" src="https://github.com/user-attachments/assets/727c678f-be61-4aae-8a80-eb95b850f42c" />
 
 > Main app
 
