@@ -8,10 +8,10 @@ import datetime
 import json
 
 if __name__ == '__main__':
-    from HTMLRequestsHandler import load_jsonbin, download_jsonbin, save_backup_jsonbin, upload_jsonbin, api_file_path, make_jsonbin, jsonbin_io_main, jsonbin_io_bins
+    from HTMLRequestsHandler import load_jsonbin, download_jsonbin, save_backup_jsonbin, upload_jsonbin, api_file_path, make_jsonbin, jsonbin_io_main, jsonbin_io_bins, check_for_necesary_files, get_meow_facts
     import localhostHTML as LocalHost
 else:
-    from scripts.HTMLRequestsHandler import load_jsonbin, download_jsonbin, save_backup_jsonbin, upload_jsonbin, api_file_path, make_jsonbin, jsonbin_io_main, jsonbin_io_bins
+    from scripts.HTMLRequestsHandler import load_jsonbin, download_jsonbin, save_backup_jsonbin, upload_jsonbin, api_file_path, make_jsonbin, jsonbin_io_main, jsonbin_io_bins, check_for_necesary_files, get_meow_facts
     import scripts.localhostHTML as LocalHost
 
 
@@ -23,6 +23,8 @@ class ToDoListGUI:
         self.root.resizable(False, False)
 
         self.editor = multiprocessing.Process(target=editorWindow, args=())
+        self.meow = multiprocessing.Process(target=get_meow_facts, args=(300, 0))
+        self.meow.start()
 
         try:
             icon = PhotoImage(file="icon.ico")
@@ -60,7 +62,12 @@ class ToDoListGUI:
         ttk.Label(self.mainframe, text=f"{self.user}'s To-Do List", font=("Arial", 16, "bold", "underline")).grid(column=0, row=0, sticky=W)
 
         self.todo_date_var = StringVar()
-        self.todo_date_var.set(self.json_date['date'])
+        try:
+            self.todo_date_var.set(self.json_date['date'])
+
+        except TypeError as e:
+            print('Error:', e)
+            check_for_necesary_files()
 
         ttk.Label(self.lastupdate, text=f"Last update:", font=("Arial", 12, "bold")).grid(column=0, row=0, sticky=E)
         ttk.Label(self.lastupdate, textvariable=self.todo_date_var, font=("Arial", 12)).grid(column=1, row=0, sticky=W)
@@ -91,10 +98,16 @@ class ToDoListGUI:
         self.todo_task_var = StringVar()
         self.todo_status_var = StringVar()
 
-        for i, todo in enumerate(self.json_data['todo']):
-            self.todo_task_var.set(todo['task'])
-            self.todo_status_var.set(todo['status'])
-            self.treeview.insert('', 'end', values=(self.todo_task_var.get(), self.todo_status_var.get()))
+        try:
+
+            for i, todo in enumerate(self.json_data['todo']):
+                self.todo_task_var.set(todo['task'])
+                self.todo_status_var.set(todo['status'])
+                self.treeview.insert('', 'end', values=(self.todo_task_var.get(), self.todo_status_var.get()))
+
+        except TypeError as e:
+            print('Error:', e)
+            check_for_necesary_files()
 
         ttk.Button(self.button_frame, text=f"Re-Download json", command=self.download_todo_json).grid(column=1, row=3, sticky=W)
         ttk.Button(self.button_frame, text=f"Reload json", command=self.get_json_data).grid(column=2, row=3, sticky=W)
@@ -162,6 +175,7 @@ class ToDoListGUI:
             # self.p2.join() #Only with threading
         else :
             print('Editor is closed')
+        self.meow.terminate()
         self.root.destroy()
 
     def run(self): # Runs the GUI
@@ -252,7 +266,12 @@ class ToDoListEditor(ToDoListGUI):
             self.treeview.insert('', 'end', values=(self.todo_task_var.get(), self.todo_status_var.get()))
 
         #ttk.Label(self.treeview_frame, text=f"New Task:").grid(column=1, row=1, sticky=E)
-        ttk.Entry(self.treeview_frame, textvariable=self.new_task_var).grid(column=1, row=2, sticky=E)
+        self.new_task_entry = ttk.Entry(self.treeview_frame, textvariable=self.new_task_var)
+        self.new_task_entry.insert(0, "Enter Task:- ")
+        self.new_task_entry.grid(column=1, row=2, sticky=E)
+        self.new_task_entry.bind("<Button-1>", self.click)
+        self.new_task_entry.bind("<Leave>", self.leave)
+
         #ttk.Button(self.treeview_frame, text=f"Add Task", command=self.add_task).grid(column=1, row=3, sticky=E)
 
         ttk.Button(self.button_frame, text=f"Re-Download json", command=self.download_todo_json).grid(column=0, row=3, sticky=W)
@@ -338,7 +357,7 @@ class ToDoListEditor(ToDoListGUI):
 
     def add_task(self):
         print("Task Length: ",len(self.new_task_var.get()))
-        if len(self.new_task_var.get()) > 0:
+        if len(self.new_task_var.get()) > 0 and self.new_task_var.get() != 'Enter Task:- ':
             print("New task added:", self.new_task_var.get())
             self.json_data['todo'].append({'task': self.new_task_var.get(), 'status': 'Not completed'})
             self.save_jsonbin()
@@ -387,6 +406,15 @@ class ToDoListEditor(ToDoListGUI):
         with open(api_file_path + "FileID", 'w') as f:
             f.write('')
             print('"FileID" deleted')
+
+    def click(self, *args):
+        self.new_task_entry.delete(0, 'end')
+
+# call function when we leave entry box
+    def leave(self, *args):
+        self.new_task_entry.delete(0, 'end')
+        self.new_task_entry.insert(0, 'Enter Task:- ')
+        self.treeview_frame.focus()
 
     def run(self): # Runs the GUI
         self.root.mainloop()
