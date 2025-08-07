@@ -502,8 +502,7 @@ class ApiKeyEditor(ToDoListGUI):
         if template.status_code == 200:
             self.bins()
         else:
-            print(template.status_code, template.reason)
-            print('Failed to upload file')
+            pass
 
     def exit(self): # Exits the program
         self.root.destroy()
