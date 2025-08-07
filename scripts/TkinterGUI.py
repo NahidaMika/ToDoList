@@ -371,10 +371,8 @@ class ToDoListEditor(ToDoListGUI):
 
             print (f"Task deleted: {self.json_data['todo'][task_index]['task']} - {self.json_data['todo'][task_index]['status']}")
 
-            # Remove the task from the json data
             del self.json_data['todo'][task_index]
 
-            # Save the updated json data to the file
             self.save_jsonbin()
 
             self.get_json_data()
@@ -410,7 +408,6 @@ class ToDoListEditor(ToDoListGUI):
     def click(self, *args):
         self.new_task_entry.delete(0, 'end')
 
-# call function when we leave entry box
     def leave(self, *args):
         self.new_task_entry.delete(0, 'end')
         self.new_task_entry.insert(0, 'Enter Task:- ')
