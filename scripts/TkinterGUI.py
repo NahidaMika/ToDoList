@@ -20,11 +20,11 @@ class ToDoListGUI:
         self.root = root
         self.user = self.get_user()
         self.root.title(f"{self.user}'s To-Do List")
+        
         self.root.resizable(False, False)
 
         self.editor = multiprocessing.Process(target=editorWindow, args=())
         self.meow = multiprocessing.Process(target=get_meow_facts, args=(300, 0))
-        self.meow.start()
 
         try:
             icon = PhotoImage(file="icon.ico")
@@ -59,7 +59,9 @@ class ToDoListGUI:
             self.lastupdate.columnconfigure(i, weight=1)
             self.lastupdate.rowconfigure(i, weight=1)
 
-        ttk.Label(self.mainframe, text=f"{self.user}'s To-Do List", font=("Arial", 16, "bold", "underline")).grid(column=0, row=0, sticky=W)
+        title = ttk.Label(self.mainframe, text=f"{self.user}'s To-Do List", font=("Arial", 16, "bold", "underline"))
+        title.grid(column=0, row=0, sticky=W)
+        title.bind("<Button-1>", self.start_meow_facts)
 
         self.todo_date_var = StringVar()
         try:
@@ -126,6 +128,14 @@ class ToDoListGUI:
         for child in self.lastupdate.winfo_children(): 
             child.grid_configure(padx=5, pady=5)
 
+    def start_meow_facts(self, *args):
+        if self.meow.is_alive():
+            print("Stopping Meow facts... ")
+            self.meow.terminate()
+        else:
+            self.meow = multiprocessing.Process(target=get_meow_facts, args=(300, 0))
+            self.meow.start()
+
     def get_json_data(self): # Reloads the json file on the GUI
         try:
             self.json_data = load_jsonbin()
@@ -164,8 +174,13 @@ class ToDoListGUI:
         self.get_json_data()
 
     def open_editor(self):
-        self.editor = multiprocessing.Process(target=editorWindow, args=())
-        self.editor.start()
+        
+        if self.editor.is_alive():
+            print('Editor is already open')
+        elif not self.editor.is_alive():
+            print('Opening Editor...')
+            self.editor = multiprocessing.Process(target=editorWindow, args=())
+            self.editor.start()
 
     def exit(self): # Exits the program
         print("Exiting the program...")
@@ -175,7 +190,6 @@ class ToDoListGUI:
             # self.p2.join() #Only with threading
         else :
             print('Editor is closed')
-        self.meow.terminate()
         self.root.destroy()
 
     def run(self): # Runs the GUI
@@ -186,11 +200,9 @@ class ToDoListEditor(ToDoListGUI):
         self.root = root
         self.user = self.get_user()
         self.root.title(f"{self.user}'s To-Do List Editor")
-        #self.root.resizable(False, False)
+        self.root.resizable(False, False)
 
         self.p2 = multiprocessing.Process(target=LocalHost.runlocalhost, args=("0.0.0.0", 5000)) #Only with multiprocessing
-
-        # self.p2 = threading.Thread(target=LocalHost.runlocalhost, args=()) #Only with threading
 
         try:
             icon = PhotoImage(file="icon.ico")
@@ -270,7 +282,7 @@ class ToDoListEditor(ToDoListGUI):
         self.new_task_entry.insert(0, "Enter Task:- ")
         self.new_task_entry.grid(column=1, row=2, sticky=E)
         self.new_task_entry.bind("<Button-1>", self.click)
-        self.new_task_entry.bind("<Leave>", self.leave)
+        self.new_task_entry.bind("<Leave>", self.leave) # Modify needed
 
         #ttk.Button(self.treeview_frame, text=f"Add Task", command=self.add_task).grid(column=1, row=3, sticky=E)
 
@@ -342,9 +354,9 @@ class ToDoListEditor(ToDoListGUI):
 
             self.json_date['date'] = datetime.datetime.now().strftime('%Y-%m-%d')
 
-            if self.json_data['todo'][selected_item]['status'] == 'Not completed':
+            if (self.json_data['todo'][selected_item]['status']).lower() == 'not completed':
                 new_status = 'Completed'
-            if self.json_data['todo'][selected_item]['status'] == 'Completed':
+            if (self.json_data['todo'][selected_item]['status']).lower() == 'completed':
                 new_status = 'Not completed'
 
             self.update_task_status(selected_item, new_status)
@@ -355,7 +367,7 @@ class ToDoListEditor(ToDoListGUI):
     def save_jsonbin(self): # Save the json file
         save_backup_jsonbin(self.json_data)
 
-    def add_task(self):
+    def add_task(self, *args): # Modify needed
         print("Task Length: ",len(self.new_task_var.get()))
         if len(self.new_task_var.get()) > 0 and self.new_task_var.get() != 'Enter Task:- ':
             print("New task added:", self.new_task_var.get())
@@ -363,6 +375,7 @@ class ToDoListEditor(ToDoListGUI):
             self.save_jsonbin()
             self.get_json_data()
             self.new_task_var.set('')
+            self.leave()
         else:
             print('No Task entered')
 
@@ -409,9 +422,12 @@ class ToDoListEditor(ToDoListGUI):
         self.new_task_entry.delete(0, 'end')
 
     def leave(self, *args):
-        self.new_task_entry.delete(0, 'end')
-        self.new_task_entry.insert(0, 'Enter Task:- ')
-        self.treeview_frame.focus()
+        if self.new_task_var.get() != '' or len(self.new_task_var.get()) != 0:
+            self.new_task_var.get()
+        else:
+            self.new_task_entry.delete(0, 'end')
+            self.new_task_entry.insert(0, 'Enter Task:- ')
+            self.treeview_frame.focus()
 
     def run(self): # Runs the GUI
         self.root.mainloop()
