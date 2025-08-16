@@ -282,9 +282,7 @@ class ToDoListEditor(ToDoListGUI):
         self.new_task_entry.insert(0, "Enter Task:- ")
         self.new_task_entry.grid(column=1, row=2, sticky=E)
         self.new_task_entry.bind("<Button-1>", self.click)
-        self.new_task_entry.bind("<Leave>", self.leave) # Modify needed
-
-        #ttk.Button(self.treeview_frame, text=f"Add Task", command=self.add_task).grid(column=1, row=3, sticky=E)
+        self.new_task_entry.bind("<Leave>", self.leave) 
 
         ttk.Button(self.button_frame, text=f"Re-Download json", command=self.download_todo_json).grid(column=0, row=3, sticky=W)
         ttk.Button(self.button_frame, text=f"Reload json", command=self.get_json_data).grid(column=1, row=3, sticky=W)
@@ -319,7 +317,6 @@ class ToDoListEditor(ToDoListGUI):
     def exit_localhost(self):# Closes the localhost 
         print('LocalHost is closing..')
         self.p2.terminate() #Only with multiprocessing
-        # self.p2.join() #Only with threading
         time.sleep(2)
         if self.p2.is_alive():
             print('LocalHost is still running')
@@ -367,7 +364,7 @@ class ToDoListEditor(ToDoListGUI):
     def save_jsonbin(self): # Save the json file
         save_backup_jsonbin(self.json_data)
 
-    def add_task(self, *args): # Modify needed
+    def add_task(self, *args): 
         print("Task Length: ",len(self.new_task_var.get()))
         if len(self.new_task_var.get()) > 0 and self.new_task_var.get() != 'Enter Task:- ':
             print("New task added:", self.new_task_var.get())
